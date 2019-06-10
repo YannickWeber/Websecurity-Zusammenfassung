@@ -163,9 +163,50 @@ fälschlicherweise akzeptiert werden (FAR=FRR)
 \end{itemize}
 
 \section{Einmalpasswörter}
+Passwörter werden durch \textbf{Zähler} oder basierend \textbf{Zeitstempel} generiert.
+Client und Server teilen gemeinsamen Schlüssel $K_A$ (individuell pro Client).
+Der Schlüsselwert wird verwendet um:
+\begin{itemize}
+	\item aus einem Zählerwert $C$ und $K_A$ das Einmalpasswort zu bestimmen.
+	\item aus dem aktuellen Zeitstempel $T$ und $K_A$ das Einmalpasswort zu bestimmen.
+\end{itemize}
+Server und Client berechnen unabhängig voneinander das Einmalpasswort. Die Authentifizierung ist erfolgreich, wenn dass Einmalpasswort übereinstimmt.\\
+\\
+\paragraph{Vorteile:}
+\begin{itemize}
+	\item Abgefangene Passwörter sind wertlos
+	\item gemeinsamer Schlüssel $K_A$ kann clientseitig auf auslese-sicherer Hardware hinterlegt werden.
+	\item Server erkennt Replay-Attacken
+\end{itemize}
+\paragraph{Nachteile:}
+\begin{itemize}
+	\item Gemeinsamer Schlüssel $K_A$ muss sicher auf Client und Server hinterlegt werden
+	\item Ist $K_A$ bekannt können Einmalpasswörter vorrausberechnet werden. 
+	\item Server hat Liste aller gemeinsamer Schlüssel
+	\item Anfällig gegenüber Man-in-the-Middle.
+	\begin{itemize}
+		\item Separater Schutz gegen MiM notwendig!
+		\item Typisch: Public-Private-Key-Auth des Server mittels SSL-Zertifikaten
+	\end{itemize}
+\end{itemize}
 
+\section{Challenge-Response-Authentifizierung}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.8]{Resources/ChallengeResponseAuth.png}
+		\caption{}
+		\label{fig:ChallengeResponeAuth.png}
+	\end{center}
+\end{figure}
 
-
+\begin{enumerate}
+	\item Alice schickt ihren Namen an den Server
+	\item Server antwortet mit einer Nonce $Z$ (\enquote{Number used once}) an Alice
+	\item Alice berechnet und schickt $M = Hash(K_A, Z)$ an den Server
+	\item Server berechnet $M' = Hash(K_A, Z)$, falls $M' = M$ dann ist Alice authentifiziert.
+	\item Alice und Server erzeugen gemeinsamen Session Key $K_S = KDF(K_A, Z)$
+	\item Weitere Kommunikation wird mit $K_S$ verschlüsselt. $K_S$ ist der Authentifizierungsbeweis.
+\end{enumerate}
 
 
 
