@@ -560,9 +560,155 @@ Existenz von Sessions wird durch entsprechende Cookies im Browser bestätigt.
 	\item Client und Authorization-Server müssen die Möglichkeit haben, im Browser einen \textbf{redirekt} anzustoßen.
 \end{itemize}
 
+\section{Diffie-Hellman}
+\begin{itemize}
+	\item erlaubt zwei Kommunikationspartnern das Generieren von einem geheimen Schlüssel über eine unsichere Verbindung
+	\item Für MiN-Angriffe sind zusätzlich Zertifikate und Signaturen nötig
+	\item Elliptic Curves lösen Primzahlenköper als Konstrukt ab, um geeignete Einwegfunktionen zu berechne.
+\end{itemize}
 
+\subsection{Problem: Kommunikation über unsicheren Kanal}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.8]{Resources/DH1}
+		\caption{}
+		\label{fig:DH1}
+	\end{center}
+\end{figure}
+\paragraph{Probleme:}
+\begin{itemize}
+	\item Wie können A und B sicherstellen, dass nur sie $k$ kennen?
+	\item Wenn $k$ über einen sicheren Kanal ausgetauscht werden muss, warum nicht dann gleich die ganze Nachricht 
+\end{itemize}
 
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.5]{Resources/DH2}
+		\caption{}
+		\label{fig:DH2}
+	\end{center}
+\end{figure}
 
+\paragraph{Probleme:}
+\begin{itemize}
+	\item Wie kann sichergestellt werden, dass der Public Key zum angeblichem Owner gehört? $\Rightarrow$ \textbf{Digitale Signaturen}
+	\item \textbf{Kompromittierte Schlüssel:} Sekret Key hat lange Lebensdauer und wird oft wiederverwendet. Auch im Nachhinein kann aus $c$ bei Bekanntwerden des private Keys $k$ berechnet werden.
+\end{itemize}
+
+\subsection{Lösung: Diffie-Hellman}
+Idee: Finde und benutze Rechenoperationen $\odot$, die:
+\begin{itemize}
+	\item kommutativ sind: $A \odot B \odot C = A \odot C \odot B$
+	\item einfach durchzuführen, aber schwer umzukehren:
+	\begin{itemize}
+	\item \textbf{einfach:} $A \odot B \rightarrow X$
+	\item \textbf{schwierig:} $\odot^{-1}(A, X) \rightarrow B$
+\end{itemize}
+\end{itemize}
+
+\subsection{Diffie-Hellman: Schlüsselaustausch}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.7]{Resources/DH3}
+		\caption{}
+		\label{fig:DH3}
+	\end{center}
+\end{figure}
+Beide Kommunikationspartner:
+\begin{itemize}
+	\item einigen sich auf Operanden $p$ von $\odot$ (public)
+	\item wählen den anderen Operanden $a, b$ (privat)
+	\item führen $\odot$ durch und übertragen das Ergebnis $A, B$
+	\item berechnen den gemeinsamen geheimen Schlüssel: \\$k = p \odot a \odot b = p \odot b \odot a = A \odot b = B \odot a$: 
+\end{itemize}
+
+\subsection{Klassischer Diffie-Hellman}
+Mathematisches Konstrukt: Primzahlenkörper
+\begin{itemize}
+	\item $x \odot y = g^{x \times y} \ mod \ p$
+	\item Potenzieren ist einfach
+	\item Logarithmieren ist schwierig
+\end{itemize}
+Ablauf:
+\begin{enumerate}
+	\item \textbf{Public Informationen} austauschen:
+	\subitem Primzahl $p$
+	\subitem Generator $g$, wobei gilt $g < p$ 
+	\item Alice wählt $a$, berechnet $A = g^a \ mod \ p$ und sendet $A$
+	\item Bob wählt $b$, berechnet $B = g^b \ mod \ p$ und sendet $B$
+	\item beide berechnen \\
+	 $k = g^{a \times b} \ mod \ p = A^{b} \ mod \ p = B^{a} \ mod \ p$
+\end{enumerate}
+\paragraph{Sicherheit:}
+\begin{itemize}
+	\item Hängt stark von der \textbf{Länger der Primzahl ab}
+	\item bis 512bit $\Rightarrow$ bereits gebrochen
+	\item bis 768bit $\Rightarrow$ mit moderatem Aufwand zu brechen
+	\item bis 1024bit $\Rightarrow$ vermutlich mit staatlicher Unterstützung zu brechen
+\end{itemize}
+\textbf{Nunber Field Sieve:}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.7]{Resources/DH4}
+		\caption{}
+		\label{fig:DH4}
+	\end{center}
+\end{figure}
+\subsection{LogJam-Angriff}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.7]{Resources/LogJam}
+		\caption{}
+		\label{fig:LogJam}
+	\end{center}
+\end{figure}
+$\Rightarrow$ Downgrade-Attacke: Angreifer zwingt die Teilnehmer, den Schlüsselaustausch mit einer 512bit Primzahl zu vollziehen. In diesem Zahlenraum können die Logarithmen bereits vorberechnet werden.
+
+\subsection{Elliptic Curves}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.5]{Resources/EC1}
+		\caption{}
+		\label{fig:EC1}
+	\end{center}
+\end{figure}
+\begin{itemize}
+	\item alternative Menge, auf der $\odot$ durchgeführt wird
+	\item $\odot$: Multiplikation von Punkten auf einer Elliptic-Curve mit einem Integer
+	\item \textbf{Public Informationen:}
+	\begin{itemize}
+	\item Definition der Kurve
+	\item Startpunkt $G$ auf dieser Kurve
+	\item errechneterpunkt $Q = nG$
+	\end{itemize}
+	\item \textbf{Private Infromation:} die Zahl $n$
+\end{itemize}
+\begin{minipage}{.5\textwidth}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.3]{Resources/EC2}
+		\caption{Addition}
+		\label{fig:EC2}
+	\end{center}
+\end{figure}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.3]{Resources/EC3}
+		\caption{Addition}
+		\label{fig:EC3}
+	\end{center}
+\end{figure}
+\end{minipage}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.6]{Resources/EC4}
+		\caption{Ablauf}
+		\label{fig:EC4}
+	\end{center}
+\end{figure}
 
 
 
