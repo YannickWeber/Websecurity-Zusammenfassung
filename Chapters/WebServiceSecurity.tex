@@ -90,16 +90,58 @@ $\Rightarrow$ Produktivitätseinschränkende Sicherheitsmechanismen laufen ins L
 	\end{center}
 \end{figure}
 
+\section{XML-Encryption}
+\subsection{Klartextnachricht}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.8]{Resources/XMLEncrypt1}
+		\caption{}
+		\label{fig:XMLEncrypt1}
+	\end{center}
+\end{figure}
 
+\subsection{encrypted Element}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.8]{Resources/XmlEncrypt2}
+		\caption{}
+		\label{fig:XmlEncrypt2}
+	\end{center}
+\end{figure}
 
+\subsection{encrypted contnent}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.8]{Resources/XmlEncrypt3}
+		\caption{}
+		\label{fig:XmlEncrypt3}
+	\end{center}
+\end{figure}
 
+\subsection{KeyInfo in EncryptedData}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.8]{Resources/XmlEncrypt4}
+		\caption{}
+		\label{fig:XmlEncrypt4}
+	\end{center}
+\end{figure}
 
+\section{Verschlüsseln und Signieren}
+\paragraph{Encrypt-Sign}
+\begin{itemize}
+	\item Trudy kann abhören und die Signatur austauschen
+	\item \textbf{Abhilfe:} Vor dem Verschlüsseln in den Klartext den Absendernamen schreiben.
+\end{itemize}
 
+\paragraph{Sign-Encrypt}
+\begin{itemize}
+	\item Der vorgesehene Empfänger kann die Nachricht um-verschlüsseln und weiterleiten
+	\item der falsche Empfänger denkt die Nachricht ist für ihn
+	\item \textbf{Abhilfe:} Alice kann vor dem Signieren den Klartext in den Empfängernamen schreiben
+\end{itemize}
 
-
-
-
-
+\section{SAML-assertions}
 
 
 

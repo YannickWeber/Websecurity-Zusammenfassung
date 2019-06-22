@@ -1,0 +1,24 @@
+\chapter{Angriffe und Schwachstellen}
+Fokus in diesem Kapitel liegt auf der Obersten Schicht von Webdiensten, der Applikation selbst.
+\textbf{Unterliegende Komponenten dürfen trotzdem nie vernachlässigt werden!}
+
+\paragraph{OWASP}
+Open Web Application Security Project: Gemeinnützige Organisation mit dem Ziel sicherer Webanwendungen.
+
+\section{Injection-Schwachstellen}
+\begin{itemize}
+	\item entstehen, wenn Eingaben eines Clients \textbf{ungeprüft an einen Interpreter} weitergeleitet werden
+	\item einfach auszunutzen, weit verbreitet, verursachen hohen Schaden
+	\item \textbf{Vermeidung:} 
+	\begin{itemize}
+	\item Sichere APIs (z.B. Prepared Statement)
+	\item Escaping, um Metazeichen der jeweiligen Syntax zu \enquote{entschärfen}
+	\item White-Lists bei Eingaben
+	\end{itemize}
+\end{itemize}
+
+\paragraph{Beispiel ShellShock}
+\begin{itemize}
+	\item Linux-Shell bash erlaubt das Definieren von Funktionen, die an Sub-Shells weitergegeben werden können. 
+	\item \textbf{Schwachstelle:} Stehen hinter der Funktionsdefinition Befehle, dann werden die beim Start der Shell ausgeführt!
+\end{itemize}
